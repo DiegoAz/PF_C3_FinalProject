@@ -1,5 +1,7 @@
 package co.com.mcu
 
+import co.com.mcu.auth.*
+
 class BootStrap {
 
     def init = { servletContext ->
@@ -16,7 +18,7 @@ class BootStrap {
       it.flush()
       it.clear()
     }
-    
+
     }
     def destroy = {
     }
