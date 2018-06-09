@@ -1,99 +1,211 @@
 package co.com.mcu
 
-import grails.validation.ValidationException
-import static org.springframework.http.HttpStatus.*
+import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.NOT_FOUND
+import static org.springframework.http.HttpStatus.NO_CONTENT
+import static org.springframework.http.HttpStatus.CREATED
+import grails.transaction.Transactional
 
+@SuppressWarnings('LineLength')
+import grails.plugin.springsecurity.annotation.Secured
+
+@Secured('ROLE_ADMIN')
 class HeroController {
 
-    HeroService heroService
+  def heroService
+  def uploadHeroImageService
+  // User user
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond heroService.list(params), model:[heroCount: heroService.count()]
+  static allowedMethods = [
+    save: "POST", 
+    update: "PUT", 
+    delete: "DELETE",
+    uploadFeaturedImage: 'POST',
+  ]
+
+
+
+ @Transactional(readOnly = true)
+ def featuredImage(Hero hero) {
+  if (hero == null || hero.featuredImageBytes == null) {
+    transactionStatus.setRollbackOnly()
+    notFound()
+    return
+  }
+  render file: hero.featuredImageBytes, contentType: hero.featuredImageContentType
+}
+
+@Transactional(readOnly = true)
+def editFeaturedImage(Hero hero) {
+  respond hero
+}
+
+def uploadFeaturedImage(FeaturedImageCommand cmd) {
+  if (cmd == null) {
+    notFound()
+    return
+  }
+
+  if (cmd.hasErrors()) {
+    respond(cmd.errors, model: [hero: cmd], view: 'editFeaturedImage')
+    return
+  }
+
+  def hero = uploadHeroImageService.uploadFeatureImage(cmd)
+
+  if (hero == null) {
+    notFound()
+    return
+  }
+
+  if (hero.hasErrors()) {
+    respond(hero.errors, model: [hero: hero], view: 'editFeaturedImage')
+    return
+  }
+
+  request.withFormat {
+    form multipartForm {
+      flash.message = message(code: 'default.updated.message', args: [message(code: 'hero.label', default: 'Hero'), hero.id])
+      redirect action: 'edit', id: hero.id
     }
+    '*' { respond hero, [status: OK] }
+  }
+}
 
-    def show(Long id) {
-        respond heroService.get(id)
+def index(Integer max) {   
+  params.max = Math.min(max ?: 20, 100)
+  def (l, total) = heroService.list(params)
+  respond l, model:[heroCount: total]
+}
+
+@Secured('ROLE_FAN')
+def fanHome(Integer max) {   
+  params.max = Math.min(max ?: 20, 100)
+  def (l, total) = heroService.list(params)
+  respond l, model:[heroCount: total]
+}
+
+def show(Hero hero) {
+  respond hero
+}
+
+def create() {
+   respond new Hero(params)     
+}
+
+def save(NameCommand cmd) {
+  if (cmd == null) {
+    notFound()
+    return
+  }
+
+  if (cmd.hasErrors()) {
+    respond cmd.errors, model: [hero: cmd], view:'create'
+    return
+  }    
+
+  def hero = heroService.save(cmd)
+
+  if (hero == null) {
+    notFound()
+    return
+  }
+
+  if (hero.hasErrors()) {
+    respond hero.errors, model: [hero: hero], view:'create'
+    return
+  }
+
+  request.withFormat {
+    form multipartForm {
+      flash.message = message(code: 'default.created.message', args: [message(code: 'hero.label', default: 'Hero'), hero.id])
+      redirect action: "edit", id: hero.id
     }
+    '*' { respond hero, [status: CREATED] }
+  }
+}
 
-    def create() {
-        respond new Hero(params)
+@Transactional(readOnly = true)
+def edit(Hero hero) {
+  respond hero
+}
+
+def update(NameUpdateCommand cmd) {
+  if (cmd == null) {
+    notFound()
+    return
+  }
+
+  if (cmd.hasErrors()) {
+    respond hero.errors, model: [hero: cmd], view:'edit'
+    return
+  }
+
+
+  def hero = heroService.update(cmd)
+
+  if (hero == null) {
+    notFound()
+    return
+  }
+
+  if (hero.hasErrors()) {
+    respond hero.errors, model: [hero: hero], view:'edit'
+    return
+  }
+
+  request.withFormat {
+    form multipartForm {
+      flash.message = message(code: 'default.updated.message', args: [message(code: 'hero.label', default: 'Hero'), hero.id])
+      redirect hero
     }
+    '*'{ respond hero, [status: OK] }
+  }
+}
 
-    def save(Hero hero) {
-        if (hero == null) {
-            notFound()
-            return
-        }
+def delete(Long id) {
+  if (id == null) {
+    notFound()
+    return
+  }
 
-        try {
-            heroService.save(hero)
-        } catch (ValidationException e) {
-            respond hero.errors, view:'create'
-            return
-        }
+  heroService.delete(id)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'hero.label', default: 'Hero'), hero.id])
-                redirect hero
-            }
-            '*' { respond hero, [status: CREATED] }
-        }
+  request.withFormat {
+    form multipartForm {
+      flash.message = message(code: 'default.deleted.message', args: [message(code: 'hero.label', default: 'Hero'), id])
+      redirect action:"index", method:"GET"
     }
+    '*'{ render status: NO_CONTENT }
+  }
+}
 
-    def edit(Long id) {
-        respond heroService.get(id)
+  @Secured('ROLE_FAN')
+  def addToFavs(Long id){
+    if (isLoggedIn()) {
+      def hero = heroService.getHero(id)   
+      getPrincipal().addToFavs(hero).save()
+          
     }
+    
+    // redirect action:"fanHome"
+  }
 
-    def update(Hero hero) {
-        if (hero == null) {
-            notFound()
-            return
-        }
+  @Secured('ROLE_FAN')
+  def favorites(Integer max){    
+    params.max = Math.min(max ?: 20, 100)
+    def (l, total) = heroService.listFavs(params)
+    respond l, model:[favsCount: total]
+  }
 
-        try {
-            heroService.save(hero)
-        } catch (ValidationException e) {
-            respond hero.errors, view:'edit'
-            return
-        }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'hero.label', default: 'Hero'), hero.id])
-                redirect hero
-            }
-            '*'{ respond hero, [status: OK] }
-        }
+protected void notFound() {
+  request.withFormat {
+    form multipartForm {
+      flash.message = message(code: 'default.not.found.message', args: [message(code: 'hero.label', default: 'Hero'), params.id])
+      redirect action: "index", method: "GET"
     }
-
-    def delete(Long id) {
-        if (id == null) {
-            notFound()
-            return
-        }
-
-        heroService.delete(id)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'hero.label', default: 'Hero'), id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'hero.label', default: 'Hero'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }
+    '*'{ render status: NOT_FOUND }
+  }
+}
 }

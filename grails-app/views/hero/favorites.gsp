@@ -10,13 +10,10 @@
     </g:message>
   </title>
   <asset:stylesheet src="admin.css" />
+  <asset:javascript src="application.js" />
 </head>
 
 <body>
-  <a class="skip" href="#list-hero" tabindex="-1">
-    <g:message code="default.link.skip.label" default="Skip to content…">
-    </g:message>
-  </a>
   <div class="nav" role="navigation">
     <ul>
       <li>
@@ -43,9 +40,9 @@
         ${flash.message}
       </div>
     </g:if>
-    <h2>You have created ${heroCount} heroes</h2>
+    <h2>You have ${favsCount} favorite heroes</h2>
     <div class="wrapper">
-      <g:each in="${heroList}" var="hero">
+      <g:each in="${favs}" var="hero">
         <div class="hero-card">
           <div class="x">
             <h4 class="title">${hero.name}</h4>
@@ -54,12 +51,15 @@
             </g:if>
           </div>
           <div class="buttons">
-            <g:link action="edit" class="button edit" id="${hero.id}">
-              <asset:image src="edit.png" alt="edit hero" />
+            <g:link action="addToFavorites" class="button" resource="${this.hero}">
+              <div class="starToggler">
+                <asset:image src="star.png " alt="battles hero " />
+                <asset:image src="starActive.png " alt="battles hero " style="display:none" />
+              </div>
             </g:link>
-            <g:form method="DELETE" resource="${hero}" class="f-delete">
-              <input class="button delete" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" type="submit" value="" />
-            </g:form>
+            <g:link action="battles" class="button battles ">
+              <asset:image src="battles.png " alt="battles hero " />
+            </g:link>
           </div>
         </div>
       </g:each>

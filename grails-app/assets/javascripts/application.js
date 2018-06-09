@@ -19,3 +19,7 @@ if (typeof jQuery !== 'undefined') {
         });
     })(jQuery);
 }
+
+$(".starToggler").click(function() {
+    $(this).find('img').toggle();
+})

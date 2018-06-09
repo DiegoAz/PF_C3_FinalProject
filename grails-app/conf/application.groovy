@@ -3,6 +3,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'co.com.mcu.auth.U
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'co.com.mcu.auth.UserRole'
 grails.plugin.springsecurity.authority.className = 'co.com.mcu.auth.Role'
 grails.plugin.springsecurity.logout.postOnly = false
+grails.plugin.springsecurity.active = false
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/',               access: ['permitAll']],
 	[pattern: '/error',          access: ['permitAll']],

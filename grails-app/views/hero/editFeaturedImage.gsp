@@ -5,12 +5,12 @@
   <meta name="layout" content="main" />
   <g:set var="entityName" value="${message(code: 'hero.label', default: 'Hero')}" />
   <title>
-    <g:message code="default.create.label" args="[entityName]" />
+    <g:message code="default.edit.label" args="[entityName]" />
   </title>
 </head>
 
 <body>
-  <a href="#create-hero" class="skip" tabindex="-1">
+  <a href="#edit-hero" class="skip" tabindex="-1">
     <g:message code="default.link.skip.label" default="Skip to content&hellip;" />
   </a>
   <div class="nav" role="navigation">
@@ -24,11 +24,15 @@
         <g:link class="list" action="index">
           <g:message code="default.list.label" args="[entityName]" /></g:link>
       </li>
+      <li>
+        <g:link class="create" action="create">
+          <g:message code="default.new.label" args="[entityName]" /></g:link>
+      </li>
     </ul>
   </div>
-  <div id="create-hero" class="content scaffold-create" role="main">
+  <div id="edit-hero" class="content scaffold-edit" role="main">
     <h1>
-      <g:message code="default.create.label" args="[entityName]" />
+      <g:message code="default.edit.label" args="[entityName]" />
     </h1>
     <g:if test="${flash.message}">
       <div class="message" role="status">${flash.message}</div>
@@ -42,15 +46,14 @@
         </g:eachError>
       </ul>
     </g:hasErrors>
-    <g:form resource="${this.hero}" method="POST">
-      <g:hiddenField name="hero.id" value="${hero.id}" />
-      <fieldset class="form">
-        <f:all bean="hero" except="featuredImageBytes,featuredImageContentType" />
-      </fieldset>
+    <g:uploadForm name="uploadFeaturedImage" action="uploadFeaturedImage">
+      <g:hiddenField name="id" value="${this.hero?.id}" />
+      <g:hiddenField name="version" value="${this.hero?.version}" />
+      <input type="file" name="featuredImageFile" />
       <fieldset class="buttons">
-        <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+        <input class="save" type="submit" value="${message(code: 'hero.featuredImage.upload.label', default: 'Upload')}" />
       </fieldset>
-    </g:form>
+    </g:uploadForm>
   </div>
 </body>
 
