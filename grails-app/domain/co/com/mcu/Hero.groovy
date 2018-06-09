@@ -15,6 +15,6 @@ class Hero {
     }
 
      static mapping = {
-        featuredImageBytes column: 'featured_image_bytes', sqlType: 'longblob' 
+        featuredImageBytes column: 'featured_image_bytes', sqlType: 'bytea' 
     }
 }

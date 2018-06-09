@@ -10,11 +10,6 @@ class HeroService {
   }
 
   @Transactional(readOnly = true)
-  List listFavs() {
-    return favs
-  }
-
-  @Transactional(readOnly = true)
   Integer count(Map params) {
     Hero.count()
   }
@@ -54,11 +49,7 @@ class HeroService {
       hero?.delete()
     }
 
-    def getHero(Long heroId){
-      log.info 'Adding to favorites...'
-      def hero = Hero.get(heroId)
-      hero          
-    }
+    
 
      @Transactional
     Hero update(NameUpdateCommand cmd) {

@@ -9,7 +9,7 @@
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <asset:link href="favicon.ico" rel="icon" type="image/x-ico">
-</asset:link>
+  </asset:link>
   <g:layoutHead/>
 </head>
 

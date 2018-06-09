@@ -181,24 +181,7 @@ def delete(Long id) {
   }
 }
 
-  @Secured('ROLE_FAN')
-  def addToFavs(Long id){
-    if (isLoggedIn()) {
-      def hero = heroService.getHero(id)   
-      getPrincipal().addToFavs(hero).save()
-          
-    }
-    
-    // redirect action:"fanHome"
-  }
-
-  @Secured('ROLE_FAN')
-  def favorites(Integer max){    
-    params.max = Math.min(max ?: 20, 100)
-    def (l, total) = heroService.listFavs(params)
-    respond l, model:[favsCount: total]
-  }
-
+  
 protected void notFound() {
   request.withFormat {
     form multipartForm {
