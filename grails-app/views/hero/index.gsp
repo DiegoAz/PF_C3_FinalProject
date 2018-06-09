@@ -13,21 +13,11 @@
 </head>
 
 <body>
-  <div class="nav" role="navigation">
-    <ul>
-      <li>
-        <a class="home" href="${createLink(uri: '/')}">
-          <g:message code="default.home.label">
-          </g:message>
-        </a>
-      </li>
-      <li>
-        <g:link action="create" class="create">
-          <g:message args="[entityName]" code="default.new.label">
-          </g:message>
-        </g:link>
-      </li>
-    </ul>
+  <div class="createHero">
+    <g:link action="create" class="create">
+      <g:message args="[entityName]" code="default.new.label">
+      </g:message>
+    </g:link>
   </div>
   <div class="content scaffold-list" id="list-hero" role="main">
     <h1 class="main-title">
@@ -39,7 +29,7 @@
         ${flash.message}
       </div>
     </g:if>
-    <h2>You have created ${heroCount} heroes</h2>
+    <h2 class="subtitle">You have created ${heroCount} heroes</h2>
     <div class="wrapper">
       <g:each in="${heroList}" var="hero">
         <div class="hero-card">

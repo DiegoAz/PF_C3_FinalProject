@@ -14,16 +14,13 @@
 </head>
 
 <body>
-  %{--
   <g:set var="springSecurityService" bean="springSecurityService" />
-  <h1>Welcome ${springSecurityService.principal.username}!</h1> --}%
   <nav class="main-nav">
     <ul>
       <li>
-        <a class="link" href="home.html">Home</a>
-      </li>
-      <li>
-        <a class="link" href="heroes.html">Heroes</a>
+        <a class="home" href="${createLink(uri: '/hero')}">
+          Heroes
+        </a>
       </li>
       <li>
         <a class="link" href="villains.html">Villanos</a>
@@ -32,12 +29,12 @@
         <a href="batallas.html">Batallas</a>
       </li>
     </ul>
-    <button class="user">
-      <img src="img/user.png" />
-    </button>
-    <button class="alerts">
-      <img src="img/alert.png" />
-    </button>
+    <g:link class="logout" controller='logout'>
+      <asset:image src="logout.png" alt="logout" />
+    </g:link>
+    <div class="username">
+      <h3>${springSecurityService.principal.username}</h3>
+    </div>
   </nav>
   <g:layoutBody/>
   <asset:javascript src="application.js" />

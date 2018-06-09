@@ -15,4 +15,28 @@
 *= require main
 */
 
+.main {
+  background: white;
+  text-align: center;
+  color: #ce0000;
+  height:100vh;
+  padding-top: 5%;
+}
+
+.button {
+  background: #ce0000;
+  color: #fff;
+  width: 30%;
+  height: 80px;
+  text-transform: uppercase;
+  display: inline-block;
+  font-weight: normal;
+  font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-decoration: none;
+  text-align: center;
+  -webkit-transform: skewX(-15deg);
+          transform: skewX(-15deg);
+  padding: 3%;
+}
+
 
