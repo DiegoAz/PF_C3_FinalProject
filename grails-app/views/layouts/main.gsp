@@ -7,8 +7,9 @@
   <title>
     <g:layoutTitle default="Grails" />
   </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" /> %{--
-  <asset:stylesheet src="application.css" /> --}%
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <asset:link href="favicon.ico" rel="icon" type="image/x-ico">
+</asset:link>
   <g:layoutHead/>
 </head>
 
