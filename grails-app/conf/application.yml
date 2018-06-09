@@ -113,7 +113,6 @@ environments:
             driverClassName: org.postgresql.Driver
             dialect: org.hibernate.dialect.PostgreSQLDialect
             url: jdbc:postgresql://ec2-50-19-232-205.compute-1.amazonaws.com/dapgp93h66npum?sslmode=require
-            # jdbc:postgresql://host:port/database
             properties:
                 jmxEnabled: true
                 initialSize: 5

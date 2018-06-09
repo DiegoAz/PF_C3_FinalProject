@@ -13,10 +13,6 @@
 </head>
 
 <body>
-  <a class="skip" href="#list-hero" tabindex="-1">
-    <g:message code="default.link.skip.label" default="Skip to content…">
-    </g:message>
-  </a>
   <div class="nav" role="navigation">
     <ul>
       <li>

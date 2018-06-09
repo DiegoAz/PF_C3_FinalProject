@@ -14,8 +14,9 @@
 </head>
 
 <body>
-  <g:set var="springSecurityService" bean="springSecurityService" /> %{--
-  <h1>Welcome ${springSecurityService.principal.username}!</h1> --}%
+ %{-- <g:set var="springSecurityService" bean="springSecurityService" />
+<h1>Welcome ${springSecurityService.principal.username}!</h1> --}%
+   
   <g:layoutBody/>
   <asset:javascript src="application.js" />
 </body>
