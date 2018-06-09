@@ -15,9 +15,7 @@
 <body>
   <h1>Participa en la comunidad de fans del MCU en Colombia</h1>
   <li>
-    <a class="button" href="${createLink(uri: '/login')}">
-      <g:message code="default.home.label" />
-    </a>
+    <g:link uri="/login">Ingresar</g:link>
   </li>
   <li>
     <g:link controller="hero" action="index">Registrarse</g:link>
