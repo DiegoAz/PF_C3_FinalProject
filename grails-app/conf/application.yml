@@ -108,11 +108,11 @@ environments:
         dataSource:           
             dbCreate: update
             pooled : true
-            username: xuhwhpsllrekyw
-            password: 8a309bbc183e2b0e2a58cdc5e164c76ce67ebf9d431ae85e5694dff820c58171
+            username: ymajagvmphimug
+            password: 58896555618e767dd4c420f2538949c344770cf04f100b631246ac6ef7ed64ce
             driverClassName: org.postgresql.Driver
             dialect: org.hibernate.dialect.PostgreSQLDialect
-            url: jdbc:postgresql://ec2-50-19-232-205.compute-1.amazonaws.com/dapgp93h66npum?sslmode=require
+            url: jdbc:postgresql://ec2-107-21-103-146.compute-1.amazonaws.com/d17oh7tvlja0u8?sslmode=require
             properties:
                 jmxEnabled: true
                 initialSize: 5
